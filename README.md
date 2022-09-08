@@ -6,7 +6,8 @@ Terraform is an open source, infrastructure as code software tool. It allows Dev
 
 Terraform manages external resources (such as public cloud infrastructure, private cloud infrastructure, network appliances, software as a service, and platform as a service) with "providers". HashiCorp maintains an extensive list of official providers, and can also integrate with community-developed providers.
 
-What is Terraform used for?
+### What is Terraform used for?
+
 - External resource management -- Terraform supports public and private cloud infrastructure, as well as network appliances and software as a service (SaaS) deployments.
 - Multi-cloud deployment -- the software tool's native ability to support multiple cloud services helps increase fault tolerance.
 - Multi-tier applications -- Terraform allows each resource collection to easily be scaled up or down as needed.
