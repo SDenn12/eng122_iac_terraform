@@ -25,4 +25,7 @@ resource "aws_instance" "app_instance" {
 		Name = "eng122_samuel_terraform_app"
 	}
 
+	# how to attach your pem key to the app instance
+	key_name = "eng122_sam_pem"
+
 }

@@ -35,6 +35,14 @@ There are some disadvantages, however, to using Terraform.
 - It doesn't have error handling.
 - Renaming resources and moving them deeper into modules can be difficult.
 
+### Setup Environment Variable (windows)
+
+- Go to "Edit the system environment variables"
+- Create aws access key and secret key environment variables such that the variable names are as listed below:
+  - aws_secret_access_key
+  - aws_access_key_id
+
+#### From here you can now run `terraform init` in the folder where you will be creating your scripts.
 
 ### HCL Script to Create EC2 Instance
 
@@ -66,5 +74,14 @@ resource "aws_instance" "app_instance" {
 		Name = "eng122_samuel_terraform_app"
 	}
 
+	# how to attach your pem key to the app instance
+	key_name = "eng122_sam_pem"
+
 }
 ```
+
+#### Run `terraform plan` to check the syntax.
+
+#### Run `terraform apply` to apply the main.tf file and create the ec2 instance.
+
+#### You can also run `terraform destroy` to destroy the instance.
