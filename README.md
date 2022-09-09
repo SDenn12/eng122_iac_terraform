@@ -139,4 +139,37 @@ resource "aws_instance" "controller_instance" {
 
 #### Data can also be abstracted into other files because the language is a declarative programming language (over procedural).
 
+Run Jenkins
+
+- Create new instance ubuntu18.04
+- Install Java 11 
+
+```
+sudo apt update 
+sudo apt upgrade -y
+sudo apt install default-jre
+sudo apt install default-jdk
+
+curl -fsSL https://pkg.jenkins.io/debian/jenkins.io.key | sudo tee \
+    /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+    https://pkg.jenkins.io/debian binary/ | sudo tee \
+    /etc/apt/sources.list.d/jenkins.list > /dev/null
+
+sudo apt-get update
+sudo apt-get install fontconfig openjdk-11-jre
+sudo apt-get install jenkins
+
+sudo systemctl start jenkins
+sudo systemctl enable jenkins
+```
+
+the next has to be run as root/administrator so type
+
+`sudo -i`
+
+Go to local host and it asks for initial password. Go to `/var/lib/jenkins/secrets` to find the password.
+
+You can type `logout` to come out of root user mode.
 
