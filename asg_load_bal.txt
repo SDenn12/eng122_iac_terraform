@@ -1,0 +1,132 @@
+"""
+resource "aws_launch_configuration" "as_conf" {
+  name_prefix   = "eng122_sam_tf_ubuntu"
+  image_id      = data.aws_ami.ubuntu.id
+  instance_type = "t2.micro"
+  key_name = "eng122_sam_pem"
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_lb" "alb" {
+  name               = "alb-tf"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.app_sg.id]
+  subnets            = [for subnet in aws_subnet.pub_subnet : subnet.id]
+
+  enable_deletion_protection = true
+
+#  access_logs {
+#    bucket  = aws_s3_bucket.lb_logs.bucket
+#    prefix  = "test-lb"
+#    enabled = true
+#  }
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+# Define ASG
+
+resource "aws_autoscaling_group" "app_asg" {
+    name                      = "eng122_sam_asg_tf"
+    max_size                  = 3
+    min_size                  = 2
+    health_check_grace_period = 300
+    health_check_type         = "ELB"
+    desired_capacity          = 2
+    force_delete              = true
+    launch_configuration      = aws_launch_configuration.as_conf.name
+    vpc_zone_identifier       = [aws_subnet.pub_subnet.id]
+    tags {
+        key = "Name"
+        value = "eng122_sam_asg_tf"
+        propagate_at_launch = true
+    }
+}
+
+# Set policy
+
+resource "aws_autoscaling_policy" "asg_policy" {
+  name                   = "eng122_sam_policy"
+  scaling_adjustment     = 1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = aws_autoscaling_group.app_asg.name
+  policy_type            = "SimpleScaling"
+}
+
+resource "aws_autoscaling_policy" "asg_policy_down" {
+  name                   = "eng122_sam_policy"
+  scaling_adjustment     = -1
+  adjustment_type        = "ChangeInCapacity"
+  cooldown               = 300
+  autoscaling_group_name = aws_autoscaling_group.app_asg.name
+  policy_type            = "SimpleScaling"
+}
+
+resource "aws_cloudwatch_metric_alarm" "alarm" {
+    alarm_name = "eng122_sam_alarm"
+    alarm_description = "alarm when cpu utilization increases"
+    comparison_operator = "GreatherThanOrEqualToThreshold
+    evaluation_periods = 2
+    metric_name = "CPUUtilization"
+    namespace = "AWS/EC2"
+    period = 120
+    statistic = "Average"
+    threshold = 20
+
+    dimensions = {
+        "AutoScalingGroupName": aws_autoscaling_group.app_asg.name
+    }
+
+    actions_enabled = true
+    alarm_actions = [aws_autoscaling_policy.asg_policy.arn]
+
+}
+
+resource "aws_cloudwatch_metric_alarm" "alarm_down" {
+    alarm_name = "eng122_sam_alarm"
+    alarm_description = "alarm when cpu utilization increases"
+    comparison_operator = "LessThanOrEqualToThreshold"
+    evaluation_periods = 2
+    metric_name = "CPUUtilization"
+    namespace = "AWS/EC2"
+    period = 120
+    statistic = "Average"
+    threshold = 20
+
+    dimensions = {
+        "AutoScalingGroupName": aws_autoscaling_group.app_asg.name
+    }
+
+    actions_enabled = true
+    alarm_actions = [aws_autoscaling_policy.asg_policy_down.arn]
+
+}
+
+resource "aws_lb" "load_balancer" {
+  name               = "eng122_samuel_tf"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.lb_sg.id]
+  subnets            = [for subnet in aws_subnet.public : subnet.id]
+
+  enable_deletion_protection = true
+
+  tags = {
+    Environment = "production"
+  }
+}
+
+data "aws_ami" "ubuntu" {
+  most_recent = true
+  owners      = ["099720109477"]
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-20220610"]
+  }
+}

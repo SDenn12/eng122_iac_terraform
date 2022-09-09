@@ -86,9 +86,6 @@ resource "aws_instance" "app_instance" {
   # using which ami
   ami = data.aws_ami.server_ami.id
 
-  # do we need it to have public ip
-  associate_public_ip_address = true
-
   # how to name your instance
   tags = {
     Name = "eng122_samuel_terraform_app"
