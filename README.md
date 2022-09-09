@@ -173,3 +173,19 @@ Go to local host and it asks for initial password. Go to `/var/lib/jenkins/secre
 
 You can type `logout` to come out of root user mode.
 
+Go back to localhost, login and install following plugins.
+
+![image](https://user-images.githubusercontent.com/110126036/189382853-5f504647-8d36-4b26-8769-62e52f4cdb95.png)
+
+![image](https://user-images.githubusercontent.com/110126036/189383033-0018a9cc-8382-4978-8b22-af5ffaf2a204.png)
+
+![image](https://user-images.githubusercontent.com/110126036/189383159-c89a826e-f0fd-4545-9733-f1c41dcf10f4.png)
+
+![image](https://user-images.githubusercontent.com/110126036/189383213-4acfc55a-0b32-4ab0-b237-e5f7aa81860b.png)
+
+![image](https://user-images.githubusercontent.com/110126036/189383291-1cad8426-f880-46c6-bc75-45cca3f4a102.png)
+
+![image](https://user-images.githubusercontent.com/110126036/189383342-ff7b93b4-7dba-4a64-8bae-7171b97ba12f.png)
+
+
+
