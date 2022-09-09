@@ -5,3 +5,4 @@ terraform.tfstate.backup
 variables.tf
 sec_groups.tf
 vpc.tf
+.terraform.tfstate.lock.info
