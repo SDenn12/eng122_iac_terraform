@@ -44,47 +44,98 @@ There are some disadvantages, however, to using Terraform.
 
 #### From here you can now run `terraform init` in the folder where you will be creating your scripts.
 
-### HCL Script to Create EC2 Instance
-
-```
-# Who is the cloud provider? (aws)
-
-provider "aws" {
-	region = "eu-west-1"
-}
-
-
-# within the cloud which part of the world? (eu-west-1)
-
-# initalise and download required packages 
-# terraform init
-resource "aws_instance" "app_instance" {
-
-	# using which ami
-	ami = "ami-0b47105e3d7fc023e"
-
-	# instance type
-	instance_type = "t2.micro"
-
-	# do we need it to have public ip
-	associate_public_ip_address = true
-
-	# how to name your instance
-	tags = {
-		Name = "eng122_samuel_terraform_app"
-	}
-
-	# how to attach your pem key to the app instance
-	key_name = "eng122_sam_pem"
-
-}
-```
-
-#### Run `terraform plan` to check the syntax.
+#### Run `terraform plan` to check the syntax and see what changes will be made.
 
 #### Run `terraform apply` to apply the main.tf file and create the ec2 instance.
 
 ![image](https://user-images.githubusercontent.com/110126036/189125869-6e26cda7-41a9-4c58-ae84-f5523fa89b04.png)
 
 #### You can also run `terraform destroy` to destroy the instance.
+
+### Example Orchestration
+
+```
+resource "aws_instance" "app_instance" {
+
+  # instance type
+  instance_type = "t2.micro"
+
+  # using which ami
+  ami = data.aws_ami.ubuntu.id
+
+  # how to name your instance
+  tags = {
+    Name = "eng122_samuel_terraform_app"
+  }
+
+
+  # how to attach your pem key to the app instance
+  key_name = "eng122_sam_pem"
+
+  vpc_security_group_ids = [aws_security_group.app_sg.id]
+
+  subnet_id = aws_subnet.pub_subnet.id
+
+  root_block_device {
+    volume_size = 8
+  }
+
+}
+
+resource "aws_instance" "database_instance" {
+
+  # instance type
+  instance_type = "t2.micro"
+
+  # using which ami
+  ami = data.aws_ami.ubuntu.id
+
+  # how to name your instance
+  tags = {
+    Name = "eng122_samuel_terraform_db"
+  }
+
+
+  # how to attach your pem key to the app instance
+  key_name = "eng122_sam_pem"
+
+  vpc_security_group_ids = [aws_security_group.app_sg.id]
+
+  subnet_id = aws_subnet.pub_subnet.id
+
+  root_block_device {
+    volume_size = 8
+  }
+
+}
+
+resource "aws_instance" "controller_instance" {
+
+  # instance type
+  instance_type = "t2.micro"
+
+  # using which ami
+  ami = data.aws_ami.controller.id
+
+  # how to name your instance
+  tags = {
+    Name = "eng122_samuel_ansible_controller"
+  }
+
+
+  # how to attach your pem key to the app instance
+  key_name = "eng122_sam_pem"
+
+  vpc_security_group_ids = [aws_security_group.app_sg.id]
+
+  subnet_id = aws_subnet.pub_subnet.id
+
+  root_block_device {
+    volume_size = 8
+  }
+
+}
+
+
+```
 
