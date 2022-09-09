@@ -139,7 +139,7 @@ resource "aws_instance" "controller_instance" {
 
 #### Data can also be abstracted into other files because the language is a declarative programming language (over procedural).
 
-Run Jenkins
+# Run Jenkins
 
 - Create new instance ubuntu18.04
 - Install Java 11 
