@@ -84,5 +84,4 @@ resource "aws_instance" "controller_instance" {
 
 }
 
-#### Data can also be abstracted into other files because the language is a declarative programming language (over procedural).
 

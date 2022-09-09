@@ -48,8 +48,6 @@ There are some disadvantages, however, to using Terraform.
 
 #### Run `terraform apply` to apply the main.tf file and create the ec2 instance.
 
-![image](https://user-images.githubusercontent.com/110126036/189125869-6e26cda7-41a9-4c58-ae84-f5523fa89b04.png)
-
 #### You can also run `terraform destroy` to destroy the instance.
 
 ### Example Orchestration
@@ -138,4 +136,7 @@ resource "aws_instance" "controller_instance" {
 
 
 ```
+
+#### Data can also be abstracted into other files because the language is a declarative programming language (over procedural).
+
 
